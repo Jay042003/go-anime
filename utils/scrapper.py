@@ -22,8 +22,7 @@ class Scrapper:
     def init(self) -> None:
         try:
             self.driver.get(
-                "https://animepahe.com/play/66f426f7-9e20-8646-b0f4-9fd4c61bbb14/c7f535bb5115e1492e63b821c994238b5d6043a9a6b5445cc5d2e317514d3a6a"
-            )
+                'https://animepahe.com/anime/c9a03d10-964a-bd20-ee4d-8370be493f28')
 
             self.driver.execute_cdp_cmd(
                 "Network.setUserAgentOverride",
@@ -31,6 +30,18 @@ class Scrapper:
                     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36"
                 },
             )
+
+            # arranging page in ascending order
+            self.driver.execute_script("""
+             document.querySelector("body > section > article > div.content-wrapper > div.episode-bar.form-group.row > div.col-6.bar > div > label:nth-child(1)").click()
+            """
+                                  )
+            # going to the page one
+            time.sleep(2)
+            self.driver.execute_script("""
+             document.querySelector("body > section > article > div.content-wrapper > div.episode-list-wrapper > div > div:nth-child(1) > div > div.episode-snapshot > a").click()
+            """
+                                  )
 
             soup = BeautifulSoup(self.driver.page_source, "lxml")
             self.driver.get(soup.find_all("a", class_="dropdown-item")[-2]["href"])
