@@ -10,7 +10,9 @@ WEBDRIVER_PATH = os.environ.get("WEBDRIVER_PATH", WEBDRIVER_PATH)
 if __name__ == "__main__":
     scrapper = Scrapper(
         wdpath=WEBDRIVER_PATH,  # passing webdriver path
-        cli_args=CliArguments().todict(),  # passing cli arguments as dict
+        cli_args=CliArguments(
+            ["link", "quality"],
+        ).todict(),  # passing cli arguments as dict
     )
 
     # Start scrapping
