@@ -1,6 +1,7 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import time, sys
+from utils.prg_bar import progress_bar
+import time, sys, colorama
 
 
 class EpisodeQuality:
@@ -23,13 +24,12 @@ class Scrapper:
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
         self.driver: webdriver.Chrome = webdriver.Chrome(wdpath)
         self.d_links = []
-        self.v_links = []
 
     def init(self) -> None:
         try:
             for i in range(start_from, max_episodes):
                 self.driver.get(
-                    'https://animepahe.com/play/c9a03d10-964a-bd20-ee4d-8370be493f28/57fadf8ec9a7ad770e7a56c872b76b5024cd8cf56d1e02cce2d8d975f1a18e1f')
+                    'https://animepahe.com/play/500e0c7f-656e-7649-d602-1f24dbdf3c58/5ebdbae707c70347ec1dd951fdde9e673913f4b0529a8f29b93fa12bf872f802')
 
                 self.driver.execute_cdp_cmd(
                     "Network.setUserAgentOverride",
@@ -37,6 +37,9 @@ class Scrapper:
                         "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36"
                     },
                 )
+
+                # minimizing window
+                self.driver.minimize_window()
 
                 # selecting ith episode
                 self.driver.execute_script(f"""
@@ -61,7 +64,12 @@ class Scrapper:
 
                 # preparing for the next link
                 self.driver.back()  
-                self.driver.back()  
+                self.driver.back()
+
+                #progress bar for showing how much links have been parsed
+                if i == 1: 
+                    print('Parsing')
+                progress_bar(i,max_episodes-start_from)
 
             # downloading from all the links given to the scraper
             for i in self.d_links:
@@ -74,8 +82,15 @@ class Scrapper:
                     document.querySelector("form").submit()
                 """
                 )
-                time.sleep(1)
 
+                # progress bar for downloads
+                if (self.d_links.index(i) == 0):
+                    print('Starting Download')
+                progress_bar(self.d_links.index(i) + 1, len(self.d_links))
+                
+                time.sleep(1)
+            
+            print('Your downloads have begun')
             print("Please quit after downloading is complete")
 
             # Preventing exit of browser
@@ -83,9 +98,9 @@ class Scrapper:
                 pass
 
         except KeyboardInterrupt:
-            print("\nEnding process")
+            print(colorama.Fore.RESET + "\nEnding process")
             sys.exit()
 
         except Exception as E:
-            print(f"\nProcess exited due to an error: {E}")
+            print(colorama.Fore.RESET + f"\nProcess exited due to an error: {E}")
             sys.exit()
