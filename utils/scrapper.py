@@ -29,8 +29,6 @@ class Scrapper:
             self.episodes =[int(i) for i in self.epilist.split()]
         else:
             self.episodes = [int(i) for i in range(self.start, self.max+1)]
-        print(self.episodes)
-
     def init(self) -> None:
         try:
             self.driver.get(
@@ -113,5 +111,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  f"\nProcess exited due to an error: {E}")
+                  "\nProcess exited due to an error")
             sys.exit()
