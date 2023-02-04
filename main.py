@@ -11,7 +11,13 @@ if __name__ == "__main__":
     scrapper = Scrapper(
         wdpath=WEBDRIVER_PATH,  # passing webdriver path
         cli_args=CliArguments(
-            ["link", "quality"],
+            [
+                "link",
+                "quality",
+                "max",
+                "start",
+                "epilist"
+            ],
         ).todict(),  # passing cli arguments as dict
     )
 
