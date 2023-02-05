@@ -1,7 +1,9 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from utils.prg_bar import progress_bar
-import time, sys, colorama
+import time
+import sys
+import colorama
 
 
 class Scrapper:
@@ -40,7 +42,7 @@ class Scrapper:
 
         if self.epilist != None:
             self.episodes = [int(i) for i in self.epilist.split()]
-            
+
         else:
             self.episodes = [int(i) for i in range(self.start, self.max+1)]
 
@@ -61,7 +63,7 @@ class Scrapper:
 
             for i in self.episodes:
 
-                # selecting ith episode
+                # selecting 1st episode
                 self.driver.execute_script(f"""
                 document.querySelector("#scrollArea > a:nth-child({i})").click()
                 """
@@ -90,7 +92,6 @@ class Scrapper:
 
                 # preparing for the next link
                 self.driver.back()
-                self.driver.back()
 
             print("\n")
             print("Parsing successful")
@@ -111,13 +112,14 @@ class Scrapper:
                 # progress bar for downloads
                 if (self.d_links.index(i) == 0):
                     action = "starting download"
-                progress_bar(self.d_links.index(i) + 1, len(self.d_links))
+                progress_bar(action, self.d_links.index(
+                    i) + 1, len(self.d_links))
 
                 time.sleep(2)
 
             print("\nDownloads started successfully")
             print(colorama.Fore.RESET +
-                  "Please quit after downloading is complete")
+                  "Please quit after downloading is complete by pressing Ctrl+C")
 
             # Preventing exit of browser
             while 1:
@@ -129,5 +131,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  f"\nProcess exited due to an error")
+                  "\nProcess exited due to an error")
             sys.exit()
