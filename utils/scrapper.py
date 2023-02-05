@@ -1,9 +1,8 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from utils.prg_bar import progress_bar
-import time
-import sys
-import colorama
+import time, sys, colorama
+
 
 class Scrapper:
 
@@ -17,18 +16,34 @@ class Scrapper:
         self.driver: webdriver.Chrome = webdriver.Chrome(wdpath)
         self.d_links = []
 
-        # scrapper options
-        self.link = cli_args.get("link")
-        self.max = cli_args.get("max")
-        self.start = cli_args.get("start")
+        # setting default values
+        self.link = "https://animepahe.com/play/65cda972-b195-1ac9-59f0-e2eb64553557/c6cdfbe2ee0b66d8a3d9a6d5a3db9ef3095962660ffec5e4899f5725e6a6910f"
         self.quality = -3
+        self.max = 12
+        self.start = 1
+
+        # scrapper options
+        if cli_args.get("link") != None:
+            self.link = cli_args.get("link")
+
+        if cli_args.get("max") != None:
+            self.max = cli_args.get("max")
+
+        if cli_args.get("start") != None:
+            self.start = cli_args.get("start")
+
         self.epilist = cli_args.get("epilist")
+
         if cli_args.get("quality") != None:
-            self.quality = Scrapper.AVAILABLE_QUALITIES[str(cli_args.get("quality"))]
+            self.quality = Scrapper.AVAILABLE_QUALITIES[str(
+                cli_args.get("quality"))]
+
         if self.epilist != None:
-            self.episodes =[int(i) for i in self.epilist.split()]
+            self.episodes = [int(i) for i in self.epilist.split()]
+            
         else:
             self.episodes = [int(i) for i in range(self.start, self.max+1)]
+
     def init(self) -> None:
         try:
             self.driver.get(
@@ -96,12 +111,13 @@ class Scrapper:
                 # progress bar for downloads
                 if (self.d_links.index(i) == 0):
                     action = "starting download"
-                progress_bar(action, self.d_links.index(i) + 1, len(self.d_links))
+                progress_bar(self.d_links.index(i) + 1, len(self.d_links))
 
                 time.sleep(2)
 
             print("\nDownloads started successfully")
-            print(colorama.Fore.RESET + "Please quit after downloading is complete")
+            print(colorama.Fore.RESET +
+                  "Please quit after downloading is complete")
 
             # Preventing exit of browser
             while 1:
