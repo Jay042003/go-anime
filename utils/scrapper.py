@@ -60,7 +60,11 @@ class Scrapper:
                 self.driver.get(soup.find_all(
                     "a", class_="dropdown-item")[self.quality]["href"])
 
-                time.sleep(4)
+                # progress bar for showing how much links have been parsed
+                action = "parsing"
+                progress_bar(action, i, len(self.episodes))
+
+                time.sleep(5)
 
                 # getting dowload links
                 soup2 = BeautifulSoup(self.driver.page_source, "lxml")
@@ -73,16 +77,14 @@ class Scrapper:
                 self.driver.back()
                 self.driver.back()
 
-                # progress bar for showing how much links have been parsed
-                if i == 1:
-                    print("Parsing")
-                progress_bar(i, len(self.episodes))
+            print("\n")
+            print("Parsing successful")
 
             # downloading from all the links given to the scraper
             for i in self.d_links:
 
                 self.driver.get(i)
-                time.sleep(1)
+                time.sleep(2)
 
                 # Executing js script to start downloading
                 self.driver.execute_script(
@@ -93,13 +95,13 @@ class Scrapper:
 
                 # progress bar for downloads
                 if (self.d_links.index(i) == 0):
-                    print(colorama.Fore.RESET + "\nStarting Download")
-                progress_bar(self.d_links.index(i) + 1, len(self.d_links))
+                    action = "starting download"
+                progress_bar(action, self.d_links.index(i) + 1, len(self.d_links))
 
-                time.sleep(1)
+                time.sleep(2)
 
-            print(colorama.Fore.RESET + "\nYour downloads have begun")
-            print("Please quit after downloading is complete")
+            print("\nDownloads started successfully")
+            print(colorama.Fore.RESET + "Please quit after downloading is complete")
 
             # Preventing exit of browser
             while 1:
@@ -111,5 +113,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  "\nProcess exited due to an error")
+                  f"\nProcess exited due to an error")
             sys.exit()
