@@ -1,4 +1,4 @@
-<a name="goanime"></a>
+<a name="readme-top"></a>
 
 <!-- PROJECT LOGO -->
 <br />
