@@ -117,6 +117,13 @@ In this section I will show how to use this program.
 First of all there are many options in this program as following:
 1. To set the link "-l"
     > <p> You can get the links from <a href="https://animepahe.com/"> here </a>. </p>
+    > <p style ="color:Red;"><b>Warning !!</b></p>
+    >link should be of the page like this page given in example
+    > <img src="images\Website.png">
+    > you can get it by following the given steps<br>
+    > 1. Visit the given website.<br>
+    > 2. Search the anime you want to see.<br>
+    > 3. The page of the anime you want to see will open if you select a anime from the search click on any one of the episodes and you will come across a page like this.
 2. To set the maximum number of episode "-m"
 3. To set the starting episode "-s"
 4. To set the quality of episodes downloaded "-q"
