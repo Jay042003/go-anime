@@ -79,7 +79,7 @@ class Scrapper:
 
                 # progress bar for showing how much links have been parsed
                 action = "parsing"
-                progress_bar(action, i, len(self.episodes))
+                progress_bar(action, self.episodes.index(i)+1, len(self.episodes))
 
                 time.sleep(5)
 
@@ -100,7 +100,7 @@ class Scrapper:
             for i in self.d_links:
 
                 self.driver.get(i)
-                time.sleep(2)
+                time.sleep(3)
 
                 # Executing js script to start downloading
                 self.driver.execute_script(
@@ -115,7 +115,7 @@ class Scrapper:
                 progress_bar(action, self.d_links.index(
                     i) + 1, len(self.d_links))
 
-                time.sleep(2)
+                time.sleep(3)
 
             print("\nDownloads started successfully")
             print(colorama.Fore.RESET +
@@ -131,5 +131,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  "\nProcess exited due to an error")
+                  f"\nProcess exited due to an error: {E}")
             sys.exit()
