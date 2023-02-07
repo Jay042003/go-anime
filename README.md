@@ -119,7 +119,7 @@ First of all there are many options in this program as following:
     > <p> You can get the links from <a href="https://animepahe.com/"> here </a>. </p>
     > <p style ="color:Red;"><b>Warning !!</b></p>
     >link should be of the page like this page given in example
-    > <img src="images\Website.png">
+    > <img src="images\Webpage.png">
     > you can get it by following the given steps<br>
     > 1. Visit the given website.<br>
     > 2. Search the anime you want to see.<br>
