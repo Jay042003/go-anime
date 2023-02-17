@@ -17,10 +17,7 @@ class Scrapper:
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
         # adding ublock origin extention
         self.options = webdriver.ChromeOptions()
-        self.options.add_extension('extentions\\6.40.12_0.crx')
         self.options.add_extension('extentions\\1.46.0_1.crx')
-        # setting dowload directory
-
         self.driver: webdriver.Chrome = webdriver.Chrome(wdpath, options=self.options)
         self.d_links = []
 
@@ -117,9 +114,7 @@ class Scrapper:
 
                 # progress bar for downloads
                 if (self.d_links.index(i) == 0):
-                    action = "starting download"
-                progress_bar(action, self.d_links.index(
-                    i) + 1, len(self.d_links))
+                    print(colorama.Fore.YELLOW + "starting download")
 
                 time.sleep(3)
 
@@ -137,5 +132,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  f"\nProcess exited due to an error: {E}")
+                  f"\nProcess exited due to an error")
             sys.exit()
