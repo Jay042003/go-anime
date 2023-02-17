@@ -15,7 +15,13 @@ class Scrapper:
     }
 
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
-        self.driver: webdriver.Chrome = webdriver.Chrome(wdpath)
+        # adding ublock origin extention
+        self.options = webdriver.ChromeOptions()
+        self.options.add_extension('extentions\\6.40.12_0.crx')
+        self.options.add_extension('extentions\\1.46.0_1.crx')
+        # setting dowload directory
+
+        self.driver: webdriver.Chrome = webdriver.Chrome(wdpath, options=self.options)
         self.d_links = []
 
         # setting default values
