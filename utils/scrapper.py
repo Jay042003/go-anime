@@ -8,22 +8,17 @@ import colorama
 
 class Scrapper:
 
-    AVAILABLE_QUALITIES = {
-        "360p": -3,
-        "720p": -2,
-        "1080p": -1,
-    }
-
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
         # adding ublock origin extention
         self.options = webdriver.ChromeOptions()
         self.options.add_extension('extentions\\1.46.0_1.crx')
-        self.driver: webdriver.Chrome = webdriver.Chrome(wdpath, options=self.options)
+        self.driver: webdriver.Chrome = webdriver.Chrome(
+            wdpath, options=self.options)
         self.d_links = []
 
         # setting default values
         self.link = "https://animepahe.com/play/65cda972-b195-1ac9-59f0-e2eb64553557/c6cdfbe2ee0b66d8a3d9a6d5a3db9ef3095962660ffec5e4899f5725e6a6910f"
-        self.quality = -3
+        self.quality = '360p'
         self.max = 12
         self.start = 1
 
@@ -40,8 +35,7 @@ class Scrapper:
         self.epilist = cli_args.get("epilist")
 
         if cli_args.get("quality") != None:
-            self.quality = Scrapper.AVAILABLE_QUALITIES[str(
-                cli_args.get("quality"))]
+            self.quality = str(cli_args.get("quality"))
 
         if self.epilist != None:
             self.episodes = [int(i) for i in self.epilist.split()]
@@ -77,13 +71,22 @@ class Scrapper:
 
                 #  visiting the redirect page
                 soup = BeautifulSoup(self.driver.page_source, "lxml")
+
+                links = soup.find_all('a')
+                indices = []
+                for k in links:
+                    if str(self.quality) in k.text:
+                        indices.append(links.index(k))
+
                 self.driver.get(soup.find_all(
-                    "a", class_="dropdown-item")[self.quality]["href"])
+                    "a")[indices[0]]["href"])
 
                 # progress bar for showing how much links have been parsed
                 action = "parsing"
-                progress_bar(action, self.episodes.index(i)+1, len(self.episodes))
+                progress_bar(action, self.episodes.index(
+                    i)+1, len(self.episodes))
 
+                time.sleep(5)
                 time.sleep(5)
 
                 # getting dowload links
@@ -101,16 +104,18 @@ class Scrapper:
 
             # downloading from all the links given to the scraper
             for i in self.d_links:
+                if i == "#pleasewait":
+                    pass
+                else:
+                    self.driver.get(i)
+                    time.sleep(3)
 
-                self.driver.get(i)
-                time.sleep(3)
-
-                # Executing js script to start downloading
-                self.driver.execute_script(
+                    # Executing js script to start downloading
+                    self.driver.execute_script(
+                        """
+                        document.querySelector("form").submit()
                     """
-                    document.querySelector("form").submit()
-                """
-                )
+                    )
 
                 # progress bar for downloads
                 if (self.d_links.index(i) == 0):
@@ -132,5 +137,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  f"\nProcess exited due to an error")
+                  f"\nProcess exited due to an error:{E}")
             sys.exit()
