@@ -9,12 +9,10 @@ import colorama
 class Scrapper:
 
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
-        # adding ublock origin extention
-        self.options = webdriver.ChromeOptions()
-        self.options.add_extension('extentions\\1.46.0_1.crx')
         self.driver: webdriver.Chrome = webdriver.Chrome(
             wdpath, options=self.options)
         self.d_links = []
+        self.not_downloaded = []
 
         # setting default values
         self.link = "https://animepahe.com/play/65cda972-b195-1ac9-59f0-e2eb64553557/c6cdfbe2ee0b66d8a3d9a6d5a3db9ef3095962660ffec5e4899f5725e6a6910f"
@@ -101,11 +99,17 @@ class Scrapper:
 
             print("\n")
             print("Parsing successful")
+            print(self.d_links)
 
             # downloading from all the links given to the scraper
+            if self.start != None:
+                count = self.start
+
             for i in self.d_links:
-                if i == "#pleasewait":
-                    pass
+                if self.epilist != None:
+                    count = self.episodes[self.d_links.index(i)]
+                if i[0] == "#":
+                    self.not_downloaded.append(count)
                 else:
                     self.driver.get(i)
                     time.sleep(3)
@@ -121,11 +125,14 @@ class Scrapper:
                 if (self.d_links.index(i) == 0):
                     print(colorama.Fore.YELLOW + "starting download")
 
+                count = count + 1
                 time.sleep(3)
 
             print("\nDownloads started successfully")
             print(colorama.Fore.RESET +
                   "Please quit after downloading is complete by pressing Ctrl+C")
+            print(colorama.Fore.RESET +
+                  f"Following episode/episodes are not downloaded {self.not_downloaded}.")
 
             # Preventing exit of browser
             while 1:
@@ -137,5 +144,5 @@ class Scrapper:
 
         except Exception as E:
             print(colorama.Fore.RESET +
-                  f"\nProcess exited due to an error:{E}")
+                  f"\nProcess exited due to an error")
             sys.exit()
