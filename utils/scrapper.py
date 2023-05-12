@@ -9,6 +9,11 @@ import colorama
 class Scrapper:
 
     def __init__(self, wdpath: str, cli_args: dict[str, str]) -> None:
+        # adding ublock origin extention
+        # if you want to add extentions
+        # self.options = webdriver.ChromeOptions()
+        # self.options.add_extension('extentions\\1.46.0_1.crx')
+        # self.options.add_extension('extentions\\6.40.12_0.crx')
         self.driver: webdriver.Chrome = webdriver.Chrome(
             wdpath, options=self.options)
         self.d_links = []
@@ -99,7 +104,6 @@ class Scrapper:
 
             print("\n")
             print("Parsing successful")
-            print(self.d_links)
 
             # downloading from all the links given to the scraper
             if self.start != None:
@@ -131,8 +135,9 @@ class Scrapper:
             print("\nDownloads started successfully")
             print(colorama.Fore.RESET +
                   "Please quit after downloading is complete by pressing Ctrl+C")
-            print(colorama.Fore.RESET +
-                  f"Following episode/episodes are not downloaded {self.not_downloaded}.")
+            if self.not_downloaded != None:
+                print(colorama.Fore.RESET +
+                    f"Following episode/episodes are not downloaded {self.not_downloaded}.")
 
             # Preventing exit of browser
             while 1:
