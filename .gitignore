@@ -1,4 +1,7 @@
 .venv
 __pycache__
 .vscode
-.extentions
+*.crx
+extentions
+1.46.0_1.crx
+6.40.12_0.crx
